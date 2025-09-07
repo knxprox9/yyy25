@@ -1,222 +1,128 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { FiTruck, FiShield, FiGift, FiX, FiCreditCard } from 'react-icons/fi';
+import { FiTruck, FiShield, FiGift, FiX } from 'react-icons/fi';
 import ToggleButton from './ToggleButton';
+
+// بيانات وسائل الدفع
+const PAYMENT_METHODS = [
+  { id: 'visa', name: 'Visa', content: 'VISA', type: 'text' },
+  { id: 'mastercard', name: 'Mastercard', content: 'circles', type: 'special' },
+  { id: 'googleplay', name: 'Google Play', content: '▶', type: 'symbol' },
+  { id: 'roblox', name: 'Roblox', content: 'R', type: 'text' },
+  { id: 'playstation', name: 'PlayStation', content: '◐◒◑◓', type: 'symbol' },
+  { id: 'amazon', name: 'Amazon', content: 'amazon', type: 'text' },
+  { id: 'itunes', name: 'iTunes', content: '♪', type: 'symbol' },
+  { id: 'shein', name: 'Shein', content: 'SHEIN', type: 'text' },
+  { id: 'steam', name: 'Steam', content: '◉', type: 'symbol' },
+  { id: 'fortnite', name: 'Fortnite', content: 'F', type: 'text' },
+  { id: 'razer', name: 'Razer Gold', content: '⧨', type: 'symbol' },
+  { id: 'flower', name: 'Flower', content: '❀', type: 'symbol' }
+];
+
+// مكون وسيلة الدفع
+const PaymentMethod = ({ method, showLabel = false }) => (
+  <li className={`payment-card ${method.id}`} aria-label={method.name}>
+    <div className={`card-icon premium-card ${method.id}`}>
+      {method.content === 'circles' ? (
+        <div className="card-circles">
+          <div className="circle red"></div>
+          <div className="circle yellow"></div>
+        </div>
+      ) : (
+        <div className="card-brand">{method.content}</div>
+      )}
+    </div>
+    {showLabel && <div className="label-text">{method.name}</div>}
+  </li>
+);
 
 const ProductCard = () => {
   const [miniOpen, setMiniOpen] = useState(false);
 
-  useEffect(() => {
-    try { console.log('ProductCard: miniOpen', miniOpen); } catch {}
-  }, [miniOpen]);
-
   return (
     <StyledWrapper data-open={miniOpen}>
       <div className="card">
-        {/* Full-screen dim background when mini overlay is open */}
-        {miniOpen && <div className="screen-dim" onClick={() => setMiniOpen(false)} aria-hidden="true" />}
+        {/* خلفية المودال */}
+        {miniOpen && (
+          <div className="screen-dim" onClick={() => setMiniOpen(false)} aria-hidden="true" />
+        )}
 
-        {/* Floating mini page overlay (same size as the card) */}
+        {/* المودال المصغر */}
         {miniOpen && (
           <div className="mini-overlay" role="dialog" aria-modal="true" aria-label="صفحة مصغرة">
             <button className="close-btn" onClick={() => setMiniOpen(false)} aria-label="إغلاق">
               <FiX size={16} />
             </button>
             <div className="mini-content">
-              {/* نفس أزرار/أيقونات الدفع الموجودة في الكرت الأصلي بنفس التصميم والحجم + الأزرار المطلوبة دون تكرار */}
               <div className="mini-payments">
                 <ul className="colors-container">
-                  <li className="payment-card visa" aria-label="Visa">
-                    <div className="card-icon premium-card visa">
-                      <div className="card-brand">VISA</div>
-                    </div>
-                    <div className="label-text">Visa</div>
-                  </li>
-                  <li className="payment-card mastercard" aria-label="Mastercard">
-                    <div className="card-icon premium-card mastercard">
-                      <div className="card-circles">
-                        <div className="circle red"></div>
-                        <div className="circle yellow"></div>
-                      </div>
-                    </div>
-                    <div className="label-text">Mastercard</div>
-                  </li>
-                  <li className="payment-card googleplay" aria-label="Google Play">
-                    <div className="card-icon premium-card googleplay">
-                      <div className="card-logo">▶</div>
-                    </div>
-                    <div className="label-text">Google Play</div>
-                  </li>
-                  <li className="payment-card roblox" aria-label="Roblox">
-                    <div className="card-icon premium-card roblox">
-                      <div className="card-brand">R</div>
-                    </div>
-                    <div className="label-text">Roblox</div>
-                  </li>
-                  <li className="payment-card playstation" aria-label="PlayStation">
-                    <div className="card-icon premium-card playstation">
-                      <div className="card-logo">◐◒◑◓</div>
-                    </div>
-                    <div className="label-text">PlayStation</div>
-                  </li>
-                  <li className="payment-card amazon" aria-label="Amazon">
-                    <div className="card-icon premium-card amazon">
-                      <div className="card-brand">amazon</div>
-                    </div>
-                    <div className="label-text">Amazon</div>
-                  </li>
-                  <li className="payment-card itunes" aria-label="iTunes">
-                    <div className="card-icon premium-card itunes">
-                      <div className="card-logo">♪</div>
-                    </div>
-                    <div className="label-text">iTunes</div>
-                  </li>
-                  <li className="payment-card shein" aria-label="Shein">
-                    <div className="card-icon premium-card shein">
-                      <div className="card-brand">SHEIN</div>
-                    </div>
-                    <div className="label-text">Shein</div>
-                  </li>
-                  <li className="payment-card steam" aria-label="Steam">
-                    <div className="card-icon premium-card steam">
-                      <div className="card-logo">◉</div>
-                    </div>
-                    <div className="label-text">Steam</div>
-                  </li>
-                  <li className="payment-card fortnite" aria-label="Fortnite">
-                    <div className="card-icon premium-card fortnite">
-                      <div className="card-brand">F</div>
-                    </div>
-                    <div className="label-text">Fortnite</div>
-                  </li>
-                  <li className="payment-card razer" aria-label="Razer Gold">
-                    <div className="card-icon premium-card razer">
-                      <div className="card-logo">⧨</div>
-                    </div>
-                    <div className="label-text">Razer Gold</div>
-                  </li>
-                  <li className="payment-card flower" aria-label="Flower">
-                    <div className="card-icon premium-card flower">
-                      <div className="card-logo">❀</div>
-                    </div>
-                    <div className="label-text">Flower</div>
-                  </li>
+                  {PAYMENT_METHODS.map(method => (
+                    <PaymentMethod key={method.id} method={method} showLabel={true} />
+                  ))}
                 </ul>
               </div>
             </div>
           </div>
         )}
 
+        {/* حاوي الصورة */}
         <div className="image-container">
-          {/* Online status indicator (green dot) */}
-          <span className={`status-dot online`} aria-label={'online'} />
+          <span className="status-dot online" aria-label="متصل" />
           <div className="toggle-wrapper" title="فتح الصفحة المصغرة">
             <ToggleButton active={miniOpen} onClick={() => setMiniOpen(true)} />
           </div>
-          <svg viewBox="0 0 1921 1081" xmlnsXlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" className="svg enhanced-background" aria-hidden="true">
+
+          {/* خلفية SVG محسنة */}
+          <svg viewBox="0 0 1921 1081" className="svg" aria-hidden="true">
             <defs>
-              <radialGradient gradientUnits="objectBoundingBox" gradientTransform="translate(0.219) scale(0.563 1)" r="1.204" cy="0.5" cx="0.5" id="enhanced-gradient">
+              <radialGradient id="bg-gradient" cx="0.5" cy="0.5" r="1.2">
                 <stop stopColor="#ffffff" offset={0} />
                 <stop stopColor="#f8fafc" offset={0.3} />
                 <stop stopColor="#e2e8f0" offset={0.7} />
                 <stop stopColor="#cbd5e0" offset={1} />
               </radialGradient>
-              
-              {/* نقاط منقطة */}
-              <pattern id="dots-pattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-                <circle cx="5" cy="5" r="1" fill="rgba(255,255,255,0.4)" />
-                <circle cx="15" cy="15" r="1" fill="rgba(0,0,0,0.1)" />
-              </pattern>
-              
-              {/* خطوط موجية */}
-              <pattern id="waves-pattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
-                <path d="M0,20 Q10,10 20,20 T40,20" stroke="rgba(255,255,255,0.2)" strokeWidth="1" fill="none" />
-                <path d="M0,20 Q10,30 20,20 T40,20" stroke="rgba(0,0,0,0.1)" strokeWidth="1" fill="none" />
-              </pattern>
             </defs>
-            
-            <g transform="translate(-121.5 -92.5)" id="hoodie">
-              {/* الخلفية الأساسية */}
-              <rect fill="url(#enhanced-gradient)" strokeWidth={1} strokeMiterlimit={10} stroke="#fff" transform="translate(122 93)" height={1080} width={1920} data-name="Rectangle 83" id="Rectangle_83" />
-              
-              {/* طبقة النقاط */}
-              <rect fill="url(#dots-pattern)" transform="translate(122 93)" height={1080} width={1920} opacity="0.6" />
-              
-              {/* طبقة الموجات */}
-              <rect fill="url(#waves-pattern)" transform="translate(122 93)" height={1080} width={1920} opacity="0.4" />
-              
-              {/* البريق المتحرك */}
-              <rect fill="url(#shine-gradient)" strokeWidth={0} transform="translate(122 93)" height={1080} width={200} opacity="0.7">
-                <animateTransform 
-                  attributeName="transform" 
-                  type="translate" 
-                  values="22 93; 922 93; 1722 93" 
-                  dur="4s" 
-                  repeatCount="indefinite" 
-                />
-                <animate 
-                  attributeName="opacity" 
-                  values="0;0.7;0" 
-                  dur="4s" 
-                  repeatCount="indefinite" 
-                />
-              </rect>
-              
-              <linearGradient id="shine-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="rgba(255,255,255,0)" />
-                <stop offset="50%" stopColor="rgba(255,255,255,0.6)" />
-                <stop offset="100%" stopColor="rgba(255,255,255,0)" />
-              </linearGradient>
-            </g>
+            <rect fill="url(#bg-gradient)" width="100%" height="100%" />
           </svg>
-          {/* Animated credit cards stack image */}
+
+          {/* صورة البطاقات */}
           <div className="animated-cards-stack">
-            <img src="/assets/credit-cards-stack.png" alt="Credit Cards Stack" />
+            <img src="/assets/credit-cards-stack.png" alt="مجموعة البطاقات الائتمانية" />
           </div>
         </div>
+
+        {/* زر المفضلة */}
         <label className="favorite">
           <input defaultChecked type="checkbox" />
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#000000">
             <circle cx="12" cy="12" r="10"/>
           </svg>
         </label>
+
+        {/* المحتوى */}
         <div className="content">
           <div className="brand">بطائق إلكترونية مسبقة الدفع</div>
           <div className="product-name">بطاقة دفع رقمية جاهزة للاستخدام الفوري</div>
+          
+          {/* مؤشر التحميل */}
           <div className="loading-indicator">
             <div className="dot"></div>
-            <div className="dot"></div>
+            <div className="dot"></div>      
             <div className="dot"></div>
           </div>
+          
+          {/* معاينة وسائل الدفع */}
           <div className="color-size-container">
             <div className="colors">
               <ul className="colors-container">
-                <li className="payment-card visa" aria-label="Visa">
-                  <div className="card-icon premium-card visa">
-                    <div className="card-brand">VISA</div>
-                  </div>
-                </li>
-                <li className="payment-card mastercard" aria-label="Mastercard">
-                  <div className="card-icon premium-card mastercard">
-                    <div className="card-circles">
-                      <div className="circle red"></div>
-                      <div className="circle yellow"></div>
-                    </div>
-                  </div>
-                </li>
-                <li className="payment-card googleplay" aria-label="Google Play">
-                  <div className="card-icon premium-card googleplay">
-                    <div className="card-logo">▶</div>
-                  </div>
-                </li>
-                <li className="payment-card roblox" aria-label="Roblox">
-                  <div className="card-icon premium-card roblox">
-                    <div className="card-brand">R</div>
-                  </div>
-                </li>
+                {PAYMENT_METHODS.slice(0, 4).map(method => (
+                  <PaymentMethod key={method.id} method={method} />
+                ))}
               </ul>
             </div>
           </div>
+          
+          {/* شريط المعلومات */}
           <div className="service-info-bar">
             <div className="service-header">
               <div className="service-level">
@@ -228,12 +134,14 @@ const ProductCard = () => {
                 <span className="duration-text">تفعيل فوري</span>
               </div>
             </div>
+            
             <div className="progress-container">
               <div className="progress-bar">
                 <div className="progress-fill" style={{width: '95%'}}></div>
               </div>
               <span className="progress-percentage">95%</span>
             </div>
+            
             <div className="service-stats">
               <div className="stat-item">
                 <span className="stat-icon">🎯</span>
@@ -244,6 +152,7 @@ const ProductCard = () => {
                 <span className="stat-text">ثقة +800 عميل</span>
               </div>
             </div>
+            
             <div className="service-features">
               <div className="feature-item">
                 <FiTruck className="feature-icon" />
@@ -259,36 +168,22 @@ const ProductCard = () => {
               </div>
             </div>
           </div>
+          
           <div className="divider" aria-hidden="true" />
 
-          {/* شريط الثقة الجديد */}
+          {/* شريط الثقة */}
           <div className="trust-bar">
-            <div className="trust-item">
-              <span className="trust-icon shield">🛡️</span>
-            </div>
+            <div className="trust-item"><span className="trust-icon">🛡️</span></div>
             <div className="trust-separator">|</div>
-            <div className="trust-item">
-              <span className="trust-icon gold-badge">🏆</span>
-            </div>
+            <div className="trust-item"><span className="trust-icon">🏆</span></div>
             <div className="trust-separator">|</div>
-            <div className="trust-item">
-              <span className="trust-icon progress-bar">📊</span>
-            </div>
+            <div className="trust-item"><span className="trust-icon">📊</span></div>
             <div className="trust-separator">|</div>
-            <div className="trust-item">
-              <span className="trust-icon lightning-speed">⚡</span>
-            </div>
+            <div className="trust-item"><span className="trust-icon">⚡</span></div>
             <div className="trust-separator">|</div>
-            <div className="trust-item">
-              <span className="trust-icon official-seal">🏅</span>
-            </div>
+            <div className="trust-item"><span className="trust-icon">🏅</span></div>
           </div>
-
-          {/* المساحة الفارغة حيث كانت الأيقونات */}
-          <div className="empty-space"></div>
-
         </div>
-
       </div>
     </StyledWrapper>
   );
@@ -298,97 +193,134 @@ const StyledWrapper = styled.div`
   .card {
     --accent-color: #ffd426;
     position: relative;
-    width: 260px; /* زيادة العرض من 240px إلى 260px */
+    width: 260px;
     background: white;
-    border-radius: 1.2rem; /* زيادة الانحناء قليلاً */
-    padding: 0.4rem; /* زيادة الحشو قليلاً */
-    padding-bottom: 0.8rem; /* تقليل المسافة من الأسفل لإزالة الفراغ */
+    border-radius: 1.2rem;
+    padding: 0.4rem;
+    padding-bottom: 0.8rem;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 50px 30px -20px, 
-                rgba(0, 0, 0, 0.1) 0px 20px 25px -15px; /* ظل مزدوج للعمق */
+                rgba(0, 0, 0, 0.1) 0px 20px 25px -15px;
     transition: all 0.5s ease-in-out;
     direction: rtl;
-    overflow: visible; /* allow elements (e.g., close button) to sit outside card bounds */
+    overflow: visible;
     z-index: 10;
   }
 
-  /* Screen dim background behind mini overlay */
-  .screen-dim { position: fixed; inset: 0; background: rgba(17,24,39,0.6); backdrop-filter: blur(0.5px); z-index: 9998; pointer-events: auto; }
-  [data-open="false"] .screen-dim { display: none; }
+  /* المودال */
+  .screen-dim { 
+    position: fixed; 
+    inset: 0; 
+    background: rgba(17,24,39,0.6); 
+    backdrop-filter: blur(0.5px); 
+    z-index: 9998; 
+    pointer-events: auto; 
+  }
 
-  /* Mini overlay that matches the card bounds */
-  .mini-overlay { position: absolute; inset: 0; background: transparent; border-radius: inherit; z-index: 10000; display: flex; flex-direction: column; box-shadow: none; animation: fadeIn 200ms ease-out; }
+  .mini-overlay { 
+    position: absolute; 
+    inset: 0; 
+    background: transparent; 
+    border-radius: inherit; 
+    z-index: 10000; 
+    display: flex; 
+    flex-direction: column; 
+    box-shadow: none; 
+    animation: fadeIn 200ms ease-out; 
+  }
 
-  .mini-overlay .close-btn { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); background: #111827; color: #fff; border: none; border-radius: 999px; width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0.95; z-index: 30; box-shadow: 0 6px 12px rgba(0,0,0,0.25); }
+  .mini-overlay .close-btn { 
+    position: absolute; 
+    top: -20px; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    background: #111827; 
+    color: #fff; 
+    border: none; 
+    border-radius: 999px; 
+    width: 26px; 
+    height: 26px; 
+    display: inline-flex; 
+    align-items: center; 
+    justify-content: center; 
+    cursor: pointer; 
+    opacity: 0.95; 
+    z-index: 30; 
+    box-shadow: 0 6px 12px rgba(0,0,0,0.25); 
+  }
 
   .mini-content { 
     padding: 0.75rem 0.75rem 1rem 0.75rem; 
     padding-top: 2.2rem; 
-    color: #2d3748; /* لون أغمق للوضوح */
+    color: #2d3748; 
     height: 100%; 
     font-family: 'Tajawal', 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
   }
 
-  .mini-payments { display:flex; justify-content:center; }
-  .mini-overlay .colors-container { margin-top: 0; }
+  .mini-payments { 
+    display: flex; 
+    justify-content: center; 
+  }
 
-  /* Same button style but as grid inside overlay */
-  .mini-overlay .colors-container { list-style-type: none; display: grid; grid-template-columns: repeat(4, 50px); gap: 10px 10px; justify-content: center; justify-items: center; align-items: start; font-size: 0.5rem; margin: 0; padding: 0; width: 100%; max-width: 240px; }
+  .mini-overlay .colors-container { 
+    list-style-type: none; 
+    display: grid; 
+    grid-template-columns: repeat(4, 50px); 
+    gap: 10px 10px; 
+    justify-content: center; 
+    justify-items: center; 
+    align-items: start; 
+    font-size: 0.5rem; 
+    margin: 0; 
+    padding: 0; 
+    width: 100%; 
+    max-width: 240px; 
+  }
 
-  .mini-overlay .payment-card { position: relative; cursor: pointer; transition: transform 0.2s ease; width: 56px; display: flex; flex-direction: column; align-items: center; gap: 0.15rem; }
-  .mini-overlay .payment-card:hover { transform: scale(1.05); }
+  .mini-overlay .payment-card { 
+    position: relative; 
+    cursor: pointer; 
+    transition: transform 0.2s ease; 
+    width: 56px; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    gap: 0.15rem; 
+  }
+
+  .mini-overlay .payment-card:hover { 
+    transform: scale(1.05); 
+  }
+
   .mini-overlay .payment-card .label-text { 
-    font-size: 0.55rem; /* حجم أكبر قليلاً للوضوح */
-    color: #4a5568; /* لون أغمق للتباين */
+    font-size: 0.55rem; 
+    color: #4a5568; 
     font-family: 'Tajawal', 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
-    font-weight: 600; /* وزن أقوى */
+    font-weight: 600; 
     line-height: 1.3; 
     text-align: center; 
   }
-  .mini-overlay .payment-card .card-icon.real-icon { 
-    width: 50px !important; 
-    height: 32px !important; 
-    display: inline-flex !important; 
-    align-items: center !important; 
-    justify-content: center !important; 
-    background: transparent !important; 
-    padding: 3px !important; 
-    border-radius: 6px !important; 
-    overflow: visible !important;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.1) !important;
-    border: none !important;
-    transition: all 0.2s ease-in-out !important;
-  }
-  .mini-overlay .payment-card .card-icon.real-icon svg,
-  .mini-overlay .payment-card .card-icon.real-icon img { width: 26px; height: 26px; transform: scale(1.0); transform-origin: center; }
 
+  /* حاوي الصورة */
   .card .image-container { 
     position: relative; 
     width: 100%; 
-    height: 140px; /* زيادة الارتفاع من 130px */
+    height: 140px; 
     border-radius: 0.8rem; 
-    border-top-left-radius: 4.5rem; /* زيادة الانحناء */
-    margin-bottom: 1.3rem; /* زيادة المسافة السفلية */
+    border-top-left-radius: 4.5rem; 
+    margin-bottom: 1.3rem; 
     overflow: visible; 
   }
-  .card .image-container .icon-image { filter: drop-shadow(0 0 0 rgba(0,0,0,0)); mix-blend-mode: normal; opacity: 0.95; }
-  .card .image-container .icon-engrave { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 120px; height: 120px; pointer-events: none; }
-  .card .image-container .icon-engrave .icon { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
-  .card .image-container .icon-engrave .icon.base { color: rgba(120,120,120,0.22); filter: blur(0.3px); }
-  .card .image-container .icon-engrave .icon.light { color: rgba(255,255,255,0.55); mix-blend-mode: screen; transform: translate(-50%, calc(-50% - 1px)); }
-  .card .image-container .icon-engrave .icon.dark { color: rgba(0,0,0,0.15); mix-blend-mode: multiply; filter: blur(0.2px); transform: translate(calc(-50% + 1px), calc(-50% + 1px)); }
-
 
   .card .image-container .status-dot { 
     position: absolute; 
     top: 8px; 
     left: 10px; 
-    width: 10px; /* زيادة الحجم */
+    width: 10px; 
     height: 10px; 
     border-radius: 50%; 
-    box-shadow: 0 0 0 3px #ffffff, 0 2px 4px rgba(0,0,0,0.15); /* ظل أوضح */
+    box-shadow: 0 0 0 3px #ffffff, 0 2px 4px rgba(0,0,0,0.15); 
+    background: #22c55e;
   }
-  .card .image-container .status-dot.online { background: #22c55e; }
-  .card .image-container .status-dot.offline { background: #9ca3af; }
 
   .card .image-container .animated-cards-stack {
     position: absolute;
@@ -407,18 +339,9 @@ const StyledWrapper = styled.div`
   }
 
   @keyframes cards-entrance {
-    0% { 
-      transform: translate(-50%, -50%) scale(0.5);
-      opacity: 0;
-    }
-    50% { 
-      transform: translate(-50%, -50%) scale(1.1);
-      opacity: 0.8;
-    }
-    100% { 
-      transform: translate(-50%, -50%) scale(1);
-      opacity: 1;
-    }
+    0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+    50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.8; }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
   }
 
   .card .image-container .svg { 
@@ -427,15 +350,7 @@ const StyledWrapper = styled.div`
     border-radius: inherit;
     position: relative;
     overflow: hidden;
-    /* خلفية متدرجة واضحة */
-    background: linear-gradient(135deg, 
-      #ffffff 0%, 
-      #f1f5f9 25%, 
-      #e2e8f0 50%, 
-      #cbd5e0 75%, 
-      #94a3b8 100%
-    );
-    /* ظلال داخلية واضحة */
+    background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 25%, #e2e8f0 50%, #cbd5e0 75%, #94a3b8 100%);
     box-shadow: 
       inset 0 8px 16px rgba(255,255,255,0.8),
       inset 0 -8px 16px rgba(0,0,0,0.3),
@@ -443,7 +358,6 @@ const StyledWrapper = styled.div`
       inset -8px 0 12px rgba(0,0,0,0.2);
   }
 
-  /* تأثير البريق الواضح */
   .card .image-container .svg::before {
     content: '';
     position: absolute;
@@ -451,83 +365,69 @@ const StyledWrapper = styled.div`
     left: -150px;
     width: 150px;
     height: 100%;
-    background: linear-gradient(90deg, 
-      rgba(255,255,255,0) 0%, 
-      rgba(255,255,255,0.8) 50%, 
-      rgba(255,255,255,0) 100%
-    );
-    animation: visible-shine 3s ease-in-out infinite;
+    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,0) 100%);
+    animation: shine 3s ease-in-out infinite;
     z-index: 2;
   }
 
-  /* نقاط واضحة */
-  .card .image-container .svg::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: 
-      radial-gradient(circle at 20% 20%, rgba(255,255,255,0.6) 2px, transparent 2px),
-      radial-gradient(circle at 60% 40%, rgba(0,0,0,0.2) 1px, transparent 1px),
-      radial-gradient(circle at 80% 70%, rgba(255,255,255,0.5) 1.5px, transparent 1.5px),
-      radial-gradient(circle at 30% 80%, rgba(0,0,0,0.15) 1px, transparent 1px);
-    background-size: 50px 50px, 30px 30px, 60px 60px, 40px 40px;
-    z-index: 1;
-  }
-
-  @keyframes visible-shine {
-    0% {
-      left: -150px;
-      opacity: 0;
-    }
-    30% {
-      opacity: 1;
-    }
-    70% {
-      opacity: 1;
-    }
-    100% {
-      left: calc(100% + 50px);
-      opacity: 0;
-    }
+  @keyframes shine {
+    0% { left: -150px; opacity: 0; }
+    30% { opacity: 1; }
+    70% { opacity: 1; }
+    100% { left: calc(100% + 50px); opacity: 0; }
   }
 
   .card .image-container .toggle-wrapper { 
     position: absolute; 
-    left: 22px; /* تحسين الموضع */
-    bottom: -22px; /* تحسين الموضع */
+    left: 22px; 
+    bottom: -22px; 
     z-index: 4; 
-    transform: scale(0.65); /* زيادة الحجم قليلاً */
+    transform: scale(0.65); 
     transform-origin: left bottom; 
   }
 
+  /* زر المفضلة */
   .card .favorite { 
     position: absolute; 
-    width: 18px; /* زيادة الحجم */
+    width: 18px; 
     height: 18px; 
     top: 10px; 
     left: 10px; 
     cursor: pointer; 
-    z-index: 5; /* التأكد من الظهور فوق العناصر الأخرى */
+    z-index: 5; 
   }
-  .card .favorite input { position: absolute; opacity: 0; width: 0; height: 0; }
-  .card .favorite input:checked ~ svg { animation: circle-bounce 0.3s; fill: #22c55e; filter: drop-shadow(0px 2px 3px rgba(34, 197, 94, 0.4)); }
-  .card .favorite svg { fill: #d1d5db; transition: all 0.2s ease; }
 
+  .card .favorite input { 
+    position: absolute; 
+    opacity: 0; 
+    width: 0; 
+    height: 0; 
+  }
+
+  .card .favorite input:checked ~ svg { 
+    animation: circle-bounce 0.3s; 
+    fill: #22c55e; 
+    filter: drop-shadow(0px 2px 3px rgba(34, 197, 94, 0.4)); 
+  }
+
+  .card .favorite svg { 
+    fill: #d1d5db; 
+    transition: all 0.2s ease; 
+  }
+
+  /* المحتوى */
   .card .content { 
-    padding: 0 20px; /* زيادة الحشو الجانبي */
-    margin-bottom: 8px; /* تقليل المسافة من الأسفل */
+    padding: 0 20px; 
+    margin-bottom: 8px; 
   }
 
   .card .content .brand { 
-    font-family: 'Tajawal', 'IBM Plex Sans Arabic', 'Noto Sans Arabic', 'Cairo', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Tajawal', 'IBM Plex Sans Arabic', 'Noto Sans Arabic', 'Cairo', sans-serif;
     font-weight: 700; 
-    font-size: 0.9rem; /* زيادة الحجم قليلاً مع البطاقة الأكبر */
+    font-size: 0.9rem; 
     color: #2d3748; 
     text-align: right; 
-    margin-bottom: 12px; /* زيادة المسافة */
+    margin-bottom: 12px; 
     line-height: 1.2; 
     letter-spacing: 0.01em; 
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); 
@@ -537,11 +437,11 @@ const StyledWrapper = styled.div`
   }
 
   .card .content .product-name { 
-    font-family: 'Tajawal', 'IBM Plex Sans Arabic', 'Noto Sans Arabic', 'Cairo', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Tajawal', 'IBM Plex Sans Arabic', 'Noto Sans Arabic', 'Cairo', sans-serif;
     font-weight: 500; 
     color: #1a202c; 
-    font-size: 0.82rem; /* زيادة الحجم قليلاً */
-    margin-bottom: 15px; /* زيادة المسافة */
+    font-size: 0.82rem; 
+    margin-bottom: 15px; 
     text-align: right; 
     line-height: 1.5; 
     letter-spacing: 0.005em; 
@@ -550,83 +450,65 @@ const StyledWrapper = styled.div`
     word-spacing: 0.08em; 
   }
 
+  /* مؤشر التحميل */
   .card .content .loading-indicator { 
     display: flex; 
     justify-content: center; 
     align-items: center; 
-    gap: 0.3rem; /* زيادة المسافة بين النقاط */
-    margin-bottom: 1.2rem; /* زيادة المسافة */
-    padding: 0.4rem 0; /* زيادة الحشو */
+    gap: 0.3rem; 
+    margin-bottom: 1.2rem; 
+    padding: 0.4rem 0; 
   }
+
   .card .content .loading-indicator .dot { 
-    width: 5px; /* زيادة حجم النقاط */
+    width: 5px; 
     height: 5px; 
     border-radius: 50%; 
     background-color: #F79E1B; 
     animation: typing-dots 1.4s infinite ease-in-out; 
   }
+
   .card .content .loading-indicator .dot:nth-child(1) { animation-delay: -0.32s; }
   .card .content .loading-indicator .dot:nth-child(2) { animation-delay: -0.16s; }
   .card .content .loading-indicator .dot:nth-child(3) { animation-delay: 0; }
 
-  .card .content .color-size-container { display: flex; justify-content: space-between; text-transform: uppercase; font-size: 0.7rem; font-weight: 700; color: #a8a8a8; gap: 2rem; margin-bottom: 1.5rem; }
-  .card .content .color-size-container > * { flex: 1; }
+  @keyframes typing-dots { 
+    0%, 80%, 100% { transform: scale(1); opacity: 0.5; } 
+    40% { transform: scale(1.2); opacity: 1; } 
+  }
 
-  .card .content .color-size-container .colors .colors-container { list-style-type: none; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.3rem; font-size: 0.5rem; margin-top: 0.2rem; }
-
-  /* تحسين نصوص الميزات العربية */
-  .card .promo-row { 
+  /* حاوي الألوان والأحجام */
+  .card .content .color-size-container { 
     display: flex; 
+    justify-content: space-between; 
+    text-transform: uppercase; 
+    font-size: 0.7rem; 
+    font-weight: 700; 
+    color: #a8a8a8; 
+    gap: 2rem; 
+    margin-bottom: 1.5rem; 
+  }
+
+  .card .content .color-size-container > * { 
+    flex: 1; 
+  }
+
+  .card .content .color-size-container .colors .colors-container { 
+    list-style-type: none; 
+    display: flex; 
+    flex-wrap: wrap; 
     align-items: center; 
     justify-content: space-between; 
-    gap: 0.5rem; /* زيادة المسافة بين العناصر */
-    margin-top: 0.6rem; 
-    color: #4a5568; 
-    font-family: 'Tajawal', 'IBM Plex Sans Arabic', 'Cairo', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-weight: 600; 
-    font-size: 0.6rem; /* زيادة الحجم قليلاً */
-  }
-  .card .promo-row .promo-item { 
-    display: inline-flex; 
-    align-items: center; 
-    gap: 0.3rem; /* زيادة المسافة بين الأيقونة والنص */
-    background: #ffffff; 
-    border: 1px solid #e2e8f0; 
-    border-radius: 999px; 
-    padding: 4px 7px; /* زيادة الحشو */
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1); /* ظل أقوى */
-    flex: 1; 
-    justify-content: center; 
-    transition: all 0.2s ease; /* إضافة تأثير انتقال */
-  }
-  .card .promo-row .promo-item:hover { 
-    transform: translateY(-1px); /* تأثير رفع خفيف عند التمرير */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15); 
-  }
-  .card .promo-row .promo-item svg { 
-    width: 13px; /* زيادة حجم الأيقونات */
-    height: 13px; 
-    color: #3182ce; 
-    flex-shrink: 0; 
-  }
-  .card .promo-row .promo-item span {
-    font-family: 'Tajawal', 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
-    font-weight: 600;
-    font-size: 0.6rem; /* زيادة حجم النص */
-    color: #2d3748; 
-    line-height: 1.2;
-    white-space: nowrap; 
+    gap: 0.3rem; 
+    font-size: 0.5rem; 
+    margin-top: 0.2rem; 
   }
 
-  /* Remove all old conflicting CSS rules */
-
-  /* PREMIUM CARD ICON STYLES - UNIFIED DESIGN SYSTEM */
-  
-  /* Base Premium Card Style */
+  /* تصميم بطاقات الدفع المميزة */
   .premium-card {
-    width: 42px !important; /* زيادة العرض */
-    height: 28px !important; /* زيادة الارتفاع */
-    border-radius: 7px !important; /* زيادة الانحناء */
+    width: 42px !important;
+    height: 28px !important;
+    border-radius: 7px !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -634,17 +516,17 @@ const StyledWrapper = styled.div`
     cursor: pointer !important;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     font-weight: 700 !important;
-    font-size: 9px !important; /* زيادة حجم النص */
+    font-size: 9px !important;
     letter-spacing: 0.5px !important;
     box-shadow: 
-      0 3px 12px rgba(0, 0, 0, 0.18), /* ظل أقوى */
+      0 3px 12px rgba(0, 0, 0, 0.18),
       0 2px 4px rgba(0, 0, 0, 0.12),
       inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
     overflow: hidden !important;
   }
 
-  /* Premium Card Gradients & Colors */
+  /* ألوان بطاقات الدفع */
   .premium-card.visa {
     background: linear-gradient(135deg, #1a1f71 0%, #4757a9 50%, #1a1f71 100%) !important;
     color: #ffffff !important;
@@ -722,7 +604,7 @@ const StyledWrapper = styled.div`
     font-size: 14px !important;
   }
 
-  /* Mastercard Circles */
+  /* دوائر Mastercard */
   .card-circles {
     display: flex !important;
     align-items: center !important;
@@ -747,7 +629,7 @@ const StyledWrapper = styled.div`
     z-index: 1 !important;
   }
 
-  /* Hover Effects - Main Card */
+  /* تأثيرات التمرير */
   .card .premium-card:hover {
     transform: translateY(-2px) scale(1.08) !important;
     box-shadow: 
@@ -757,7 +639,6 @@ const StyledWrapper = styled.div`
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
   }
 
-  /* Active Effects - Main Card */
   .card .premium-card:active {
     transform: translateY(0px) scale(1.02) !important;
     box-shadow: 
@@ -766,7 +647,7 @@ const StyledWrapper = styled.div`
       inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
   }
 
-  /* Mini Overlay Premium Card Styles */
+  /* أنماط المودال المصغر */
   .mini-overlay .premium-card {
     width: 50px !important;
     height: 32px !important;
@@ -788,7 +669,6 @@ const StyledWrapper = styled.div`
     font-size: 14px !important;
   }
 
-  /* Mini Overlay Hover Effects */
   .mini-overlay .premium-card:hover {
     transform: translateY(-3px) scale(1.1) !important;
     box-shadow: 
@@ -798,7 +678,6 @@ const StyledWrapper = styled.div`
     border: 1px solid rgba(255, 255, 255, 0.3) !important;
   }
 
-  /* Mini Overlay Active Effects */
   .mini-overlay .premium-card:active {
     transform: translateY(-1px) scale(1.05) !important;
     box-shadow: 
@@ -807,22 +686,17 @@ const StyledWrapper = styled.div`
       inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
   }
 
-
-
-
-  /* Blue divider under rating spanning full card width */
+  /* الخط الأزرق الفاصل */
   .card .divider { 
-    height: 2.5px; /* زيادة السماكة قليلاً */
+    height: 2.5px; 
     width: 100%; 
-    background: linear-gradient(90deg, #2563EB 0%, #3b82f6 100%); /* تدرج لوني */
+    background: linear-gradient(90deg, #2563EB 0%, #3b82f6 100%); 
     opacity: 0.9; 
-    margin: 2.8rem 0 0.8rem; /* إضافة مسافة فاصلة بين الخط الأزرق وشريط الثقة */
-    border-radius: 2px; /* إضافة انحناء خفيف */
+    margin: 2.8rem 0 0.8rem; 
+    border-radius: 2px; 
   }
 
-
-
-  /* Service Info Bar Styles */
+  /* شريط المعلومات */
   .card .content .service-info-bar {
     background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
     border: 1px solid #cbd5e0;
@@ -967,7 +841,7 @@ const StyledWrapper = styled.div`
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
 
-  /* Trust Bar Styles */
+  /* شريط الثقة */
   .card .content .trust-bar {
     display: flex;
     justify-content: center;
@@ -1000,76 +874,17 @@ const StyledWrapper = styled.div`
     transition: all 0.3s ease;
   }
 
-  .card .content .trust-bar .trust-icon.shield {
-    filter: drop-shadow(0 0 3px rgba(34, 197, 94, 0.5));
-    animation: pulse-green 2s infinite;
+  /* انيميشن النقاط الجذابة */
+  @keyframes circle-bounce { 
+    0% { transform: scale(1); } 
+    50% { transform: scale(1.3); } 
+    100% { transform: scale(1); } 
   }
 
-  .card .content .trust-bar .trust-icon.gold-badge {
-    filter: drop-shadow(0 0 3px rgba(251, 191, 36, 0.7));
-    animation: gold-shine 3s infinite;
+  @keyframes fadeIn { 
+    from { opacity: 0; } 
+    to { opacity: 1; } 
   }
-
-  .card .content .trust-bar .trust-icon.progress-bar {
-    background: linear-gradient(90deg, #22c55e 0%, #22c55e 100%, #e5e7eb 100%);
-    background-size: 100% 100%;
-    animation: progress-fill 2s infinite;
-  }
-
-  .card .content .trust-bar .trust-icon.lightning-speed {
-    color: #fbbf24;
-    filter: drop-shadow(0 0 3px rgba(251, 191, 36, 0.6));
-    animation: lightning-flash 3s infinite;
-  }
-
-  .card .content .trust-bar .trust-icon.official-seal {
-    filter: drop-shadow(0 0 4px rgba(234, 179, 8, 0.6));
-    animation: seal-rotate 4s infinite;
-  }
-
-  @keyframes pulse-green {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); filter: drop-shadow(0 0 5px rgba(34, 197, 94, 0.8)); }
-  }
-
-  @keyframes gold-shine {
-    0%, 100% { filter: drop-shadow(0 0 3px rgba(251, 191, 36, 0.7)); }
-    50% { filter: drop-shadow(0 0 6px rgba(251, 191, 36, 1)) brightness(1.2); }
-  }
-
-  @keyframes progress-fill {
-    0% { background: linear-gradient(90deg, #22c55e 0%, #e5e7eb 0%); }
-    100% { background: linear-gradient(90deg, #22c55e 100%, #e5e7eb 100%); }
-  }
-
-  @keyframes lightning-flash {
-    0%, 80%, 100% { 
-      transform: scale(1); 
-      filter: drop-shadow(0 0 3px rgba(251, 191, 36, 0.6)); 
-    }
-    40% { 
-      transform: scale(1.05); 
-      filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.8)); 
-    }
-  }
-
-  @keyframes seal-rotate {
-    0%, 100% { transform: rotate(0deg); filter: drop-shadow(0 0 4px rgba(234, 179, 8, 0.6)); }
-    25% { transform: rotate(5deg); }
-    50% { transform: rotate(0deg); filter: drop-shadow(0 0 6px rgba(234, 179, 8, 0.9)); }
-    75% { transform: rotate(-5deg); }
-  }
-
-  .card .content .empty-space {
-    height: 0;
-    margin-bottom: 0;
-  }
-
-  .card:hover { transform: scale(1.03); }
-
-  @keyframes typing-dots { 0%, 80%, 100% { transform: scale(1); opacity: 0.5; } 40% { transform: scale(1.2); opacity: 1; } }
-  @keyframes circle-bounce { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
-  @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
 `;
 
 export default ProductCard;
