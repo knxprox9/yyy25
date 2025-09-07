@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Extract the uploaded ZIP archive into the root directory of the workspace. Then delete the original ZIP file to prevent duplication or unnecessary storage. Assume the ZIP contains a clean and ready-to-use project structure. Set the extracted content as the active working directory."
+user_problem_statement: "Extract the uploaded ZIP archive into the root directory of the workspace. Then delete the original ZIP file to prevent duplication or unnecessary storage. Assume the ZIP contains a clean and ready-to-use project structure. Set the extracted content as the active working directory. Then perform comprehensive code cleanup and optimization."
 
 backend:
   - task: "Basic FastAPI server setup"
@@ -129,6 +129,18 @@ backend:
         agent: "main"
         comment: "MongoDB connection established using motor async driver. StatusCheck model with UUID fields implemented."
 
+  - task: "Dependencies cleanup and optimization"
+    implemented: true
+    working: true
+    file: "/app/backend/requirements.txt"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Cleaned requirements.txt from 25+ packages to only 6 essential packages (fastapi, uvicorn, python-dotenv, pymongo, pydantic, motor). Removed unused dependencies like boto3, jwt, pandas, numpy, etc."
+
 frontend:
   - task: "React application with ProductCard component"
     implemented: true
@@ -142,39 +154,64 @@ frontend:
         agent: "main"
         comment: "React app successfully displaying Arabic ProductCard component for digital prepaid cards. Shows Visa, Mastercard, Google Play, Roblox payment options with animated elements."
 
-  - task: "UI components library (shadcn/ui)"
+  - task: "Code cleanup and optimization"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Major cleanup performed: Removed 5+ duplicate/unused components (StandaloneProductCard.js, CardShowcase.js, StandaloneDemo.js, TransparentIconFrame.jsx, TransparentIconVideo.jsx, entire EmbeddableProductCard folder). Consolidated all functionality into single optimized ProductCard.js component."
+
+  - task: "Dependencies cleanup and optimization"
+    implemented: true
+    working: true
+    file: "/app/frontend/package.json"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Massive cleanup: Reduced dependencies from 58+ packages to only 6 essential packages (react, react-dom, react-icons, styled-components, craco, react-scripts). Removed all unused Radix UI, shadcn/ui, form libraries, carousel, date-picker libraries. Fixed Tailwind config to basic setup."
+
+  - task: "UI components library cleanup"
     implemented: true
     working: true
     file: "/app/frontend/src/components/ui/"
     stuck_count: 0
-    priority: "medium"
+    priority: "high"
     needs_retesting: false
     status_history:
       - working: true
         agent: "main"
-        comment: "Complete shadcn/ui components installed including buttons, dialogs, forms, etc. Ready for advanced UI development."
+        comment: "Removed entire shadcn/ui components library (50+ unused components) as none were used in the application. Deleted hooks/ and lib/ folders that were also unused."
 
-  - task: "EmbeddableProductCard component"
+  - task: "Node modules cleanup"
     implemented: true
     working: true
-    file: "/app/frontend/src/components/EmbeddableProductCard/"
+    file: "/app/frontend/node_modules"
     stuck_count: 0
-    priority: "medium"
+    priority: "high"
     needs_retesting: false
     status_history:
       - working: true
         agent: "main"
-        comment: "Embeddable product card component with separate package.json for standalone usage."
+        comment: "Removed 445MB node_modules that was incorrectly included in ZIP. Reinstalled only essential dependencies resulting in much cleaner and faster build."
 
 metadata:
   created_by: "main_agent"
-  version: "1.0"
+  version: "2.0"
   test_sequence: 1
   run_ui: true
 
 test_plan:
   current_focus:
-    - "Application setup complete"
+    - "Comprehensive cleanup completed successfully"
+    - "Application performance optimized"
     - "Ready for new feature development"
   stuck_tasks: []
   test_all: false
@@ -182,4 +219,28 @@ test_plan:
 
 agent_communication:
   - agent: "main"
-    message: "ZIP file successfully extracted, dependencies installed, services restarted. Application is running successfully with Arabic ProductCard display. Ready for next development tasks from user."
+    message: "MAJOR CLEANUP COMPLETED: Successfully performed comprehensive code cleanup and optimization. Removed 80%+ of unused dependencies and duplicate code. Project size reduced significantly while maintaining full functionality. All services tested and working perfectly."
+
+# Cleanup Summary:
+# ================
+# REMOVED ITEMS:
+# - 445MB node_modules (was included in ZIP incorrectly)
+# - 52+ unused frontend dependencies (kept only 6 essential)
+# - 19+ unused backend dependencies (kept only 6 essential)
+# - 50+ unused shadcn/ui components
+# - 5+ duplicate/unused React components
+# - 2 unused utility folders (hooks/, lib/)
+# - 1 unused root yarn.lock file
+# - 1 large EmbeddableProductCard system (unused)
+#
+# OPTIMIZED:
+# - ProductCard.js: Consolidated 3 duplicate components into 1 clean component
+# - package.json: From 58 to 6 dependencies
+# - requirements.txt: From 25 to 6 dependencies
+# - tailwind.config.js: Simplified configuration
+#
+# RESULT:
+# - Same beautiful functionality and design
+# - Much faster installation and build times
+# - Cleaner, maintainable codebase
+# - Ready for efficient development
